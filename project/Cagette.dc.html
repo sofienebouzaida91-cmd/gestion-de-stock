@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @keyframes cg-spin { to { transform: rotate(360deg); } }
+  @keyframes cg-up { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes cg-pop { 0% { transform: scale(0.5); opacity:0; } 60% { transform: scale(1.08); } 100% { transform: scale(1); opacity:1; } }
+  @keyframes cg-scanline { 0% { top:8%; } 100% { top:88%; } }
+  *::-webkit-scrollbar { width:0; height:0; }
+</style>
+</helmet>
+<div style="min-height:100vh;width:100%;background:radial-gradient(120% 90% at 50% 0%, #EDE7DC 0%, #E4DDD1 100%);display:flex;align-items:center;justify-content:center;padding:28px;box-sizing:border-box;font-family:'Nunito',system-ui,sans-serif;">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+
+<div style="height:100%;background:#F4EFE7;color:#2B2620;font-family:'Nunito',system-ui,sans-serif;position:relative;display:flex;flex-direction:column;overflow:hidden;">
+
+<!-- ============ SCAN FULLSCREEN FLOW ============ -->
+<sc-if value="{{ isScan }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;">
+
+  <sc-if value="{{ isCam }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;background:#191510;display:flex;flex-direction:column;position:relative;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:60px 20px 8px;position:relative;z-index:3;">
+      <button onClick="{{ closeScan }}" style="width:40px;height:40px;border:none;border-radius:999px;background:rgba(255,255,255,0.14);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</button>
+      <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:16px;color:#fff;">Scanner un ticket</div>
+      <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 12a6 6 0 0112 0M6 12a6 6 0 0012 0M3 12h1M20 12h1" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;position:relative;">
+      <!-- receipt sitting in frame -->
+      <div style="width:214px;background:#FBF7EF;border-radius:8px;padding:16px 16px 22px;box-shadow:0 24px 60px rgba(0,0,0,0.5);transform:rotate(-1.4deg);font-family:'Nunito';color:#4b463d;">
+        <div style="text-align:center;font-family:'Bricolage Grotesque';font-weight:800;font-size:15px;letter-spacing:1px;color:#2B2620;">SUPER FRAIS</div>
+        <div style="text-align:center;font-size:9px;color:#9a927f;margin-top:2px;">12 rue du Marché · 01/07/26 18:42</div>
+        <div style="border-top:1px dashed #cfc6b2;margin:10px 0 8px;"></div>
+        <div style="font-size:10px;line-height:1.9;">
+          <div style="display:flex;justify-content:space-between;"><span>Lait demi-écrémé x2</span><span>2,10</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Pâtes penne 500g</span><span>0,95</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Café moulu 250g</span><span>4,29</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Bananes 1kg</span><span>1,79</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Yaourt nature x8</span><span>2,45</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Pain de mie</span><span>1,55</span></div>
+        </div>
+        <div style="border-top:1px dashed #cfc6b2;margin:8px 0;"></div>
+        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:11px;color:#2B2620;"><span>TOTAL</span><span>13,13 €</span></div>
+      </div>
+      <!-- frame corners -->
+      <div style="position:absolute;inset:8% 34px;pointer-events:none;">
+        <div style="position:absolute;top:0;left:0;width:34px;height:34px;border-top:3px solid #7BC98C;border-left:3px solid #7BC98C;border-radius:6px 0 0 0;"></div>
+        <div style="position:absolute;top:0;right:0;width:34px;height:34px;border-top:3px solid #7BC98C;border-right:3px solid #7BC98C;border-radius:0 6px 0 0;"></div>
+        <div style="position:absolute;bottom:0;left:0;width:34px;height:34px;border-bottom:3px solid #7BC98C;border-left:3px solid #7BC98C;border-radius:0 0 0 6px;"></div>
+        <div style="position:absolute;bottom:0;right:0;width:34px;height:34px;border-bottom:3px solid #7BC98C;border-right:3px solid #7BC98C;border-radius:0 0 6px 0;"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;padding-bottom:14px;">Placez le ticket dans le cadre</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:40px;padding:0 0 44px;">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.14);"></div>
+      <button onClick="{{ shoot }}" style="width:74px;height:74px;border-radius:999px;background:transparent;border:4px solid #fff;padding:4px;cursor:pointer;display:flex;">
+        <div style="flex:1;border-radius:999px;background:#7BC98C;"></div>
+      </button>
+      <div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2" stroke="rgba(255,255,255,0.8)" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isProcessing }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;background:#191510;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;position:relative;overflow:hidden;">
+    <div style="width:180px;height:236px;background:#FBF7EF;border-radius:8px;position:relative;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
+      <div style="padding:18px 16px;">
+        <div style="height:10px;width:70%;margin:0 auto 12px;background:#e4dcc9;border-radius:3px;"></div>
+        <div style="height:6px;background:#eee6d4;border-radius:3px;margin-bottom:9px;"></div>
+        <div style="height:6px;background:#eee6d4;border-radius:3px;margin-bottom:9px;width:85%;"></div>
+        <div style="height:6px;background:#eee6d4;border-radius:3px;margin-bottom:9px;"></div>
+        <div style="height:6px;background:#eee6d4;border-radius:3px;margin-bottom:9px;width:60%;"></div>
+        <div style="height:6px;background:#eee6d4;border-radius:3px;margin-bottom:9px;width:90%;"></div>
+      </div>
+      <div style="position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#7BC98C,transparent);box-shadow:0 0 16px 3px rgba(123,201,140,0.7);animation:cg-scanline 1.1s ease-in-out infinite alternate;"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;color:#fff;">
+      <div style="width:22px;height:22px;border:3px solid rgba(255,255,255,0.25);border-top-color:#7BC98C;border-radius:999px;animation:cg-spin 0.8s linear infinite;"></div>
+      <span style="font-weight:700;font-size:15px;">Lecture du ticket…</span>
+    </div>
+    <div style="color:rgba(255,255,255,0.5);font-size:12px;">Reconnaissance des 6 articles</div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isConfirm }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;background:#F4EFE7;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="padding:56px 20px 14px;background:#fff;border-bottom:1px solid rgba(43,38,32,0.07);">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <div style="width:30px;height:30px;border-radius:999px;background:#4C9A5E;display:flex;align-items:center;justify-content:center;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:18px;line-height:1;">Ticket lu</div>
+            <div style="font-size:11px;color:#8A8175;margin-top:3px;">Super Frais · 01/07 · 13,13 €</div>
+          </div>
+        </div>
+        <button onClick="{{ closeScan }}" style="width:36px;height:36px;border:none;border-radius:999px;background:#F0EBE1;color:#6F6659;font-size:17px;cursor:pointer;">✕</button>
+      </div>
+      <div style="margin-top:12px;font-size:12.5px;color:#6F6659;">Vérifiez les articles, ajustez les quantités puis validez.</div>
+    </div>
+
+    <div style="flex:1;overflow:auto;padding:12px 16px 120px;">
+      <sc-for list="{{ scannedView }}" as="item" hint-placeholder-count="6">
+        <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:10px 12px;margin-bottom:10px;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+          <div style="width:40px;height:40px;border-radius:11px;background:#F4EFE7;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;">{{ item.emoji }}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:700;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.name }}</div>
+            <div style="font-size:11px;color:#9a927f;">{{ item.sub }}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:#F4EFE7;border-radius:999px;padding:3px;">
+            <button onClick="{{ item.onDec }}" style="width:28px;height:28px;border:none;border-radius:999px;background:#fff;color:#2B2620;font-size:18px;font-weight:700;cursor:pointer;line-height:1;">−</button>
+            <span style="min-width:16px;text-align:center;font-weight:800;font-size:14px;">{{ item.qty }}</span>
+            <button onClick="{{ item.onInc }}" style="width:28px;height:28px;border:none;border-radius:999px;background:#fff;color:#2B2620;font-size:17px;font-weight:700;cursor:pointer;line-height:1;">+</button>
+          </div>
+          <button onClick="{{ item.onToggle }}" style="{{ item.checkStyle }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="{{ item.checkMark }}"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </sc-for>
+      <button style="width:100%;border:1.5px dashed #cfc6b2;background:transparent;color:#8A8175;border-radius:14px;padding:13px;font-family:'Nunito';font-weight:700;font-size:13.5px;cursor:pointer;">+ Ajouter un article manquant</button>
+    </div>
+
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 16px 30px;background:linear-gradient(180deg,rgba(244,239,231,0),#F4EFE7 32%);">
+      <button onClick="{{ confirmScan }}" style="width:100%;border:none;border-radius:16px;background:#4C9A5E;color:#fff;padding:16px;font-family:'Bricolage Grotesque';font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 8px 20px rgba(76,154,94,0.32);">{{ scanBtnLabel }}</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;background:#F4EFE7;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 34px;text-align:center;">
+    <div style="width:96px;height:96px;border-radius:999px;background:#E9F3EB;display:flex;align-items:center;justify-content:center;animation:cg-pop 0.5s cubic-bezier(.2,.8,.3,1.2);">
+      <div style="width:64px;height:64px;border-radius:999px;background:#4C9A5E;display:flex;align-items:center;justify-content:center;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+    <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:24px;margin-top:24px;">{{ doneTitle }}</div>
+    <div style="font-size:14px;color:#6F6659;margin-top:8px;line-height:1.5;">Votre stock est à jour. Nous surveillons les dates de péremption pour vous.</div>
+    <button onClick="{{ go_home }}" style="margin-top:30px;border:none;border-radius:14px;background:#2B2620;color:#fff;padding:15px 40px;font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;cursor:pointer;">Voir mon stock</button>
+  </div>
+  </sc-if>
+
+</div>
+</sc-if>
+
+<!-- ============ MAIN APP (tabs) ============ -->
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="height:100%;display:flex;flex-direction:column;">
+<div style="flex:1;overflow:auto;">
+
+  <!-- ---------- HOME ---------- -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div style="padding:58px 20px 30px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:13px;color:#8A8175;font-weight:600;">{{ dateLabel }}</div>
+        <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:26px;line-height:1.1;margin-top:2px;">Bonjour Camille</div>
+      </div>
+      <div style="width:44px;height:44px;border-radius:999px;background:#E5B96A;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque';font-weight:800;color:#fff;font-size:17px;">C</div>
+    </div>
+
+    <!-- hero anti-gaspi -->
+    <div style="margin-top:20px;border-radius:24px;padding:20px;background:linear-gradient(135deg,#4C9A5E,#3C7E4D);color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 28px rgba(76,154,94,0.28);">
+      <div style="position:absolute;right:-24px;top:-24px;width:120px;height:120px;border-radius:999px;background:rgba(255,255,255,0.08);"></div>
+      <div style="position:absolute;right:24px;bottom:-30px;width:80px;height:80px;border-radius:999px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;opacity:0.9;position:relative;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3C9 7 7 9 7 13a5 5 0 0010 0c0-4-2-6-5-10z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        Anti-gaspi ce mois-ci
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;margin-top:10px;position:relative;">
+        <span style="font-family:'Bricolage Grotesque';font-weight:800;font-size:40px;line-height:0.9;">3,2</span>
+        <span style="font-size:15px;font-weight:700;padding-bottom:5px;">kg sauvés</span>
+      </div>
+      <div style="margin-top:10px;font-size:13px;opacity:0.92;position:relative;">≈ 18 € économisés · 6 produits sauvés à temps</div>
+    </div>
+
+    <!-- mini stats -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;">
+      <div style="background:#fff;border-radius:18px;padding:14px 12px;text-align:center;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+        <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:22px;">{{ totalCount }}</div>
+        <div style="font-size:11px;color:#8A8175;font-weight:600;margin-top:2px;">en stock</div>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:14px 12px;text-align:center;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+        <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:22px;color:#C0492B;">{{ expiringCount }}</div>
+        <div style="font-size:11px;color:#8A8175;font-weight:600;margin-top:2px;">à finir vite</div>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:14px 12px;text-align:center;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+        <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:22px;color:#B07A1E;">{{ lowCount }}</div>
+        <div style="font-size:11px;color:#8A8175;font-weight:600;margin-top:2px;">stock bas</div>
+      </div>
+    </div>
+
+    <!-- à consommer vite -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:26px 2px 12px;">
+      <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:18px;">À consommer vite</div>
+      <button onClick="{{ go_alerts }}" style="border:none;background:transparent;color:#4C9A5E;font-family:'Nunito';font-weight:700;font-size:13px;cursor:pointer;">Tout voir</button>
+    </div>
+    <sc-for list="{{ expiringView }}" as="item" hint-placeholder-count="3">
+      <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+        <div style="width:46px;height:46px;border-radius:13px;background:#F4EFE7;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">{{ item.emoji }}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:15px;">{{ item.name }}</div>
+          <div style="font-size:12px;color:#9a927f;margin-top:1px;">{{ item.qtyLabel }}</div>
+          <div style="{{ item.badgeStyle }}">{{ item.statusText }}</div>
+        </div>
+        <button onClick="{{ item.onConsume }}" style="border:1.5px solid #4C9A5E;background:#fff;color:#4C9A5E;border-radius:11px;padding:9px 12px;font-family:'Nunito';font-weight:700;font-size:12.5px;cursor:pointer;white-space:nowrap;">Consommé</button>
+      </div>
+    </sc-for>
+
+    <!-- bons plans -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:26px 2px 12px;">
+      <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:18px;">Bons plans pour vous</div>
+      <button onClick="{{ go_promos }}" style="border:none;background:transparent;color:#4C9A5E;font-family:'Nunito';font-weight:700;font-size:13px;cursor:pointer;">Tout voir</button>
+    </div>
+    <sc-for list="{{ promosHome }}" as="p" hint-placeholder-count="2">
+      <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+        <div style="width:46px;height:46px;border-radius:13px;background:{{ p.color }};display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque';font-weight:800;color:#fff;font-size:16px;flex-shrink:0;">{{ p.initial }}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.product }}</div>
+          <div style="font-size:11.5px;color:#4C9A5E;font-weight:700;margin-top:2px;">{{ p.reason }}</div>
+          <div style="font-size:11px;color:#9a927f;margin-top:1px;">{{ p.enseigne }}</div>
+        </div>
+        <div style="background:#F7E5DE;color:#C0492B;font-family:'Bricolage Grotesque';font-weight:800;font-size:14px;border-radius:11px;padding:8px 10px;">{{ p.off }}</div>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+  <!-- ---------- STOCK ---------- -->
+  <sc-if value="{{ isStock }}" hint-placeholder-val="{{ false }}">
+  <div style="padding:58px 20px 30px;">
+    <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:28px;">Mon stock</div>
+    <div style="display:flex;align-items:center;gap:9px;background:#fff;border-radius:14px;padding:12px 14px;margin-top:16px;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9a927f" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#9a927f" stroke-width="2" stroke-linecap="round"/></svg>
+      <span style="color:#9a927f;font-size:14px;">Rechercher un produit</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px;overflow:auto;padding-bottom:2px;">
+      <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+        <div style="{{ c.style }}">{{ c.label }}</div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:18px;">
+      <sc-for list="{{ stockView }}" as="item" hint-placeholder-count="9">
+        <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:11px 12px;margin-bottom:9px;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+          <div style="width:42px;height:42px;border-radius:12px;background:#F4EFE7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">{{ item.emoji }}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:700;font-size:14.5px;">{{ item.name }}</div>
+            <div style="font-size:11.5px;color:#9a927f;margin-top:1px;">{{ item.qtyLabel }}</div>
+          </div>
+          <div style="{{ item.badgeStyle }}">{{ item.statusText }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ---------- ALERTS ---------- -->
+  <sc-if value="{{ isAlerts }}" hint-placeholder-val="{{ false }}">
+  <div style="padding:58px 20px 30px;">
+    <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:28px;">Alertes</div>
+    <div style="font-size:13px;color:#6F6659;margin-top:4px;">Ce qui a besoin de votre attention.</div>
+
+    <div style="display:flex;align-items:center;gap:8px;margin:24px 2px 12px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3C9 7 7 9 7 13a5 5 0 0010 0c0-4-2-6-5-10z" stroke="#C0492B" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:17px;">Périme bientôt</div>
+      <div style="background:#F7E5DE;color:#C0492B;font-weight:800;font-size:12px;border-radius:999px;padding:2px 9px;">{{ expiringCount }}</div>
+    </div>
+    <sc-for list="{{ expiringView }}" as="item" hint-placeholder-count="3">
+      <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:0 1px 2px rgba(43,38,32,0.05);border-left:4px solid {{ item.barColor }};">
+        <div style="width:44px;height:44px;border-radius:12px;background:#F4EFE7;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;">{{ item.emoji }}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:15px;">{{ item.name }}</div>
+          <div style="{{ item.badgeStyle }}">{{ item.statusText }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <button onClick="{{ item.onConsume }}" style="border:none;background:#4C9A5E;color:#fff;border-radius:10px;padding:8px 12px;font-family:'Nunito';font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;">Consommé</button>
+          <button style="border:1.5px solid #E4DDD1;background:#fff;color:#6F6659;border-radius:10px;padding:8px 12px;font-family:'Nunito';font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;">Recette</button>
+        </div>
+      </div>
+    </sc-for>
+
+    <div style="display:flex;align-items:center;gap:8px;margin:26px 2px 12px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h7" stroke="#B07A1E" stroke-width="2" stroke-linecap="round"/></svg>
+      <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:17px;">Stock bas</div>
+      <div style="background:#F8EEDB;color:#B07A1E;font-weight:800;font-size:12px;border-radius:999px;padding:2px 9px;">{{ lowCount }}</div>
+    </div>
+    <sc-for list="{{ lowView }}" as="item" hint-placeholder-count="2">
+      <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+        <div style="width:44px;height:44px;border-radius:12px;background:#F4EFE7;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;">{{ item.emoji }}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:15px;">{{ item.name }}</div>
+          <div style="font-size:12px;color:#9a927f;margin-top:1px;">Il reste {{ item.qtyLabel }}</div>
+        </div>
+        <button onClick="{{ item.onAddList }}" style="{{ item.listBtnStyle }}">{{ item.listBtnLabel }}</button>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+  <!-- ---------- PROMOS ---------- -->
+  <sc-if value="{{ isPromos }}" hint-placeholder-val="{{ false }}">
+  <div style="padding:58px 20px 30px;">
+    <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:28px;">Bons plans</div>
+    <div style="font-size:13px;color:#6F6659;margin-top:4px;">Promos en cours, choisies selon votre stock.</div>
+    <sc-for list="{{ promosAll }}" as="p" hint-placeholder-count="4">
+      <div style="background:#fff;border-radius:20px;padding:14px;margin-top:14px;box-shadow:0 1px 2px rgba(43,38,32,0.05);">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:44px;height:44px;border-radius:12px;background:{{ p.color }};display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque';font-weight:800;color:#fff;font-size:16px;flex-shrink:0;">{{ p.initial }}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.product }}</div>
+            <div style="font-size:12px;color:#9a927f;margin-top:1px;">{{ p.enseigne }} · {{ p.deal }}</div>
+          </div>
+          <div style="background:#F7E5DE;color:#C0492B;font-family:'Bricolage Grotesque';font-weight:800;font-size:15px;border-radius:12px;padding:9px 11px;">{{ p.off }}</div>
+        </div>
+        <sc-if value="{{ p.linked }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:6px;margin-top:11px;background:#E9F3EB;border-radius:10px;padding:8px 11px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3C7E4D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span style="font-size:12px;color:#3C7E4D;font-weight:700;">{{ p.reason }}</span>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+</div>
+
+<!-- ---------- TAB BAR ---------- -->
+<div style="flex-shrink:0;position:relative;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(43,38,32,0.07);padding:10px 14px 30px;">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+
+    <button onClick="{{ go_home }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-6 8 6M6 10v9h12v-9" stroke="{{ cHome }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-size:10.5px;font-weight:700;color:{{ cHome }};">Accueil</span>
+    </button>
+
+    <button onClick="{{ go_stock }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 8l8-4 8 4v8l-8 4-8-4V8z" stroke="{{ cStock }}" stroke-width="2" stroke-linejoin="round"/><path d="M4 8l8 4 8-4M12 12v8" stroke="{{ cStock }}" stroke-width="2" stroke-linejoin="round"/></svg>
+      <span style="font-size:10.5px;font-weight:700;color:{{ cStock }};">Stock</span>
+    </button>
+
+    <div style="flex:1;display:flex;justify-content:center;">
+      <button onClick="{{ openScan }}" style="width:60px;height:60px;margin-top:-30px;border-radius:999px;border:4px solid #F4EFE7;background:#4C9A5E;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(76,154,94,0.4);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 9a2 2 0 012-2h1.5l1-2h5l1 2H20a0 0 0 010 0 2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V9z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" stroke="#fff" stroke-width="2"/></svg>
+      </button>
+    </div>
+
+    <button onClick="{{ go_alerts }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;position:relative;">
+      <div style="position:relative;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z" stroke="{{ cAlerts }}" stroke-width="2" stroke-linejoin="round"/><path d="M10 19a2 2 0 004 0" stroke="{{ cAlerts }}" stroke-width="2" stroke-linecap="round"/></svg>
+        <div style="position:absolute;top:-3px;right:-5px;min-width:16px;height:16px;padding:0 3px;box-sizing:border-box;border-radius:999px;background:#C0492B;color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1.5px solid #fff;">{{ alertTotal }}</div>
+      </div>
+      <span style="font-size:10.5px;font-weight:700;color:{{ cAlerts }};">Alertes</span>
+    </button>
+
+    <button onClick="{{ go_promos }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h7l9 9-7 7-9-9V4z" stroke="{{ cPromos }}" stroke-width="2" stroke-linejoin="round"/><circle cx="8.5" cy="8.5" r="1.6" fill="{{ cPromos }}"/></svg>
+      <span style="font-size:10.5px;font-weight:700;color:{{ cPromos }};">Promos</span>
+    </button>
+
+  </div>
+</div>
+
+</div>
+</sc-if>
+
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'home',
+    scanStep: 'camera',
+    justAdded: 0,
+    addedList: {},
+    inventory: [
+      { id:'i1', name:'Salade verte', emoji:'🥬', qty:1, unit:'pièce', dlcDays:1, cat:'Frais' },
+      { id:'i2', name:'Lait demi-écrémé', emoji:'🥛', qty:2, unit:'briques', dlcDays:2, cat:'Frais' },
+      { id:'i3', name:'Œufs', emoji:'🥚', qty:4, unit:'restants', dlcDays:3, cat:'Frais' },
+      { id:'i4', name:'Comté', emoji:'🧀', qty:1, unit:'200 g', dlcDays:5, cat:'Frais' },
+      { id:'i5', name:'Yaourts nature', emoji:'🥣', qty:8, unit:'pots', dlcDays:6, cat:'Frais' },
+      { id:'i6', name:'Tomates', emoji:'🍅', qty:6, unit:'pièces', dlcDays:7, cat:'Fruits & légumes' },
+      { id:'i7', name:'Pommes', emoji:'🍎', qty:5, unit:'pièces', dlcDays:12, cat:'Fruits & légumes' },
+      { id:'i8', name:'Beurre doux', emoji:'🧈', qty:1, unit:'plaquette', dlcDays:20, cat:'Frais' },
+      { id:'i9', name:'Café moulu', emoji:'☕', qty:1, unit:'presque vide', dlcDays:null, cat:'Épicerie', low:true },
+      { id:'i10', name:'Pâtes penne', emoji:'🍝', qty:1, unit:'paquet', dlcDays:null, cat:'Épicerie', low:true },
+      { id:'i11', name:'Sucre en poudre', emoji:'🧂', qty:1, unit:'fond de paquet', dlcDays:null, cat:'Épicerie', low:true },
+      { id:'i12', name:'Riz basmati', emoji:'🍚', qty:1, unit:'1 kg', dlcDays:null, cat:'Épicerie' },
+    ],
+    scanned: [
+      { id:'s1', name:'Lait demi-écrémé', emoji:'🥛', qty:2, unit:'briques', sub:'Frais · DLC ~5 j', dlcDays:5, cat:'Frais', include:true },
+      { id:'s2', name:'Pâtes penne 500g', emoji:'🍝', qty:1, unit:'paquet', sub:'Épicerie', dlcDays:null, cat:'Épicerie', include:true },
+      { id:'s3', name:'Café moulu 250g', emoji:'☕', qty:1, unit:'paquet', sub:'Épicerie', dlcDays:null, cat:'Épicerie', include:true },
+      { id:'s4', name:'Bananes', emoji:'🍌', qty:6, unit:'pièces', sub:'Fruits · DLC ~5 j', dlcDays:5, cat:'Fruits & légumes', include:true },
+      { id:'s5', name:'Yaourt nature', emoji:'🥣', qty:8, unit:'pots', sub:'Frais · DLC ~14 j', dlcDays:14, cat:'Frais', include:true },
+      { id:'s6', name:'Pain de mie', emoji:'🍞', qty:1, unit:'paquet', sub:'Boulangerie · DLC ~6 j', dlcDays:6, cat:'Épicerie', include:true },
+    ],
+  };
+
+  // ---- navigation
+  go(s){ return () => this.setState({ screen:s }); }
+  openScan(){ this.setState({ screen:'scan', scanStep:'camera' }); }
+  closeScan(){ this.setState({ screen:'home', scanStep:'camera' }); }
+  shoot(){ this.setState({ scanStep:'processing' }); setTimeout(() => this.setState({ scanStep:'confirm' }), 1700); }
+
+  // ---- scan editing
+  scanInc(id, d){ this.setState(s => ({ scanned: s.scanned.map(it => it.id===id ? { ...it, qty: Math.max(1, it.qty + d) } : it) })); }
+  scanToggle(id){ this.setState(s => ({ scanned: s.scanned.map(it => it.id===id ? { ...it, include: !it.include } : it) })); }
+  confirmScan(){
+    const add = this.state.scanned.filter(it => it.include);
+    this.setState(s => ({
+      inventory: [
+        ...add.map((it,i) => ({ id:'n'+Date.now()+i, name:it.name.replace(/ \d+\w*$/,''), emoji:it.emoji, qty:it.qty, unit:it.unit, dlcDays:it.dlcDays, cat:it.cat })),
+        ...s.inventory,
+      ],
+      scanStep:'done',
+      justAdded: add.length,
+    }));
+  }
+
+  // ---- inventory actions
+  consume(id){ this.setState(s => ({ inventory: s.inventory.filter(it => it.id!==id) })); }
+  addToList(id){ this.setState(s => ({ addedList: { ...s.addedList, [id]: true } })); }
+
+  // ---- status helpers
+  status(dlcDays){
+    if (dlcDays == null) return { text:'Longue conservation', color:'#6F6659', bg:'#EFE9DF' };
+    if (dlcDays <= 0)   return { text:'Périme aujourd’hui', color:'#C0492B', bg:'#F7E5DE' };
+    if (dlcDays <= 1)   return { text:'Périme demain', color:'#C0492B', bg:'#F7E5DE' };
+    if (dlcDays <= 3)   return { text:dlcDays+' jours restants', color:'#B07A1E', bg:'#F8EEDB' };
+    return { text:dlcDays+' jours', color:'#3C7E4D', bg:'#E9F3EB' };
+  }
+  badge(st){ return { display:'inline-flex', alignItems:'center', marginTop:'6px', padding:'3px 9px', borderRadius:'999px', fontSize:'11.5px', fontWeight:800, background:st.bg, color:st.color }; }
+
+  enrichItem(it){
+    const st = this.status(it.dlcDays);
+    return {
+      ...it,
+      qtyLabel: it.qty + (it.unit ? ' ' + it.unit : ''),
+      statusText: st.text,
+      badgeStyle: this.badge(st),
+      barColor: st.color,
+      onConsume: () => this.consume(it.id),
+    };
+  }
+
+  renderVals(){
+    const inv = this.state.inventory;
+    const screen = this.state.screen, step = this.state.scanStep;
+    const active = '#2B2620', muted = '#B3AA99';
+
+    const expiring = inv.filter(it => it.dlcDays != null && it.dlcDays <= 3)
+                        .sort((a,b) => a.dlcDays - b.dlcDays).map(it => this.enrichItem(it));
+    const low = inv.filter(it => it.low);
+    const lowView = low.map(it => {
+      const added = !!this.state.addedList[it.id];
+      return {
+        ...it,
+        qtyLabel: it.unit,
+        onAddList: () => this.addToList(it.id),
+        listBtnLabel: added ? '✓ Ajouté' : '+ Liste',
+        listBtnStyle: {
+          border:'none', borderRadius:'11px', padding:'10px 13px', cursor:'pointer',
+          fontFamily:"'Nunito'", fontWeight:700, fontSize:'12.5px', whiteSpace:'nowrap',
+          background: added ? '#E9F3EB' : '#B07A1E', color: added ? '#3C7E4D' : '#fff',
+        },
+      };
+    });
+
+    const scannedView = this.state.scanned.map(it => ({
+      ...it,
+      onInc: () => this.scanInc(it.id, 1),
+      onDec: () => this.scanInc(it.id, -1),
+      onToggle: () => this.scanToggle(it.id),
+      checkStyle: {
+        width:'28px', height:'28px', flexShrink:0, borderRadius:'9px', cursor:'pointer',
+        display:'flex', alignItems:'center', justifyContent:'center', transition:'all .15s',
+        border: '2px solid ' + (it.include ? '#4C9A5E' : '#CFC6B2'),
+        background: it.include ? '#4C9A5E' : '#fff',
+      },
+      checkMark: { opacity: it.include ? 1 : 0 },
+    }));
+    const includeCount = this.state.scanned.filter(it => it.include).length;
+
+    const promoData = [
+      { initial:'C', color:'#2C6ECB', product:'Café moulu Grand-Mère 250g', enseigne:'Carrefour', deal:'2,99 € au lieu de 4,29 €', off:'-30%', linked:true, reason:'Votre café est presque vide' },
+      { initial:'L', color:'#E5651E', product:'Pâtes Barilla 500g', enseigne:'Leclerc', deal:'2 achetés = 1 offert', off:'3=2', linked:true, reason:'Il ne vous reste qu’un paquet' },
+      { initial:'L', color:'#0C5CA8', product:'Lait demi-écrémé x6', enseigne:'Lidl', deal:'3,99 € au lieu de 5,40 €', off:'-26%', linked:true, reason:'Vous en consommez souvent' },
+      { initial:'I', color:'#C81B23', product:'Yaourts nature x16', enseigne:'Intermarché', deal:'2,49 € le pack', off:'-20%', linked:false, reason:'' },
+    ];
+
+    const catList = ['Tout', 'Frais', 'Fruits & légumes', 'Épicerie', 'Boissons'];
+    const cats = catList.map((c,i) => ({
+      label: c,
+      style: {
+        flexShrink:0, padding:'8px 15px', borderRadius:'999px', fontSize:'13px', fontWeight:700, cursor:'pointer', whiteSpace:'nowrap',
+        background: i===0 ? '#2B2620' : '#fff', color: i===0 ? '#fff' : '#6F6659',
+        boxShadow: i===0 ? 'none' : '0 1px 2px rgba(43,38,32,0.05)',
+      },
+    }));
+
+    const days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const d = new Date();
+    const dateLabel = days[d.getDay()] + ' ' + d.getDate() + ' juillet';
+
+    return {
+      isScan: screen==='scan', showTabs: screen!=='scan',
+      isCam: step==='camera', isProcessing: step==='processing', isConfirm: step==='confirm', isDone: step==='done',
+      isHome: screen==='home', isStock: screen==='stock', isAlerts: screen==='alerts', isPromos: screen==='promos',
+
+      go_home: this.go('home'), go_stock: this.go('stock'), go_alerts: this.go('alerts'), go_promos: this.go('promos'),
+      openScan: () => this.openScan(), closeScan: () => this.closeScan(),
+      shoot: () => this.shoot(), confirmScan: () => this.confirmScan(),
+
+      cHome: screen==='home' ? active : muted,
+      cStock: screen==='stock' ? active : muted,
+      cAlerts: screen==='alerts' ? active : muted,
+      cPromos: screen==='promos' ? active : muted,
+
+      dateLabel,
+      totalCount: inv.length,
+      expiringCount: expiring.length,
+      lowCount: low.length,
+      alertTotal: expiring.length + low.length,
+
+      expiringView: expiring,
+      lowView,
+      stockView: inv.map(it => this.enrichItem(it)),
+      cats,
+
+      scannedView,
+      scanBtnLabel: 'Ajouter ' + includeCount + (includeCount>1 ? ' produits' : ' produit'),
+      doneTitle: this.state.justAdded + (this.state.justAdded>1 ? ' produits ajoutés' : ' produit ajouté'),
+
+      promosHome: promoData.filter(p => p.linked).slice(0,2),
+      promosAll: promoData,
+    };
+  }
+}
+</script>
+</body>
+</html>
