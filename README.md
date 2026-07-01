@@ -1,25 +1,35 @@
-# CODING AGENTS: READ THIS FIRST
+# Cagette
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Anti-gaspillage app for households: recognizes grocery receipts, tracks stock, and alerts on
+low/expiring items with promos linked to what you actually buy. Built from the Cagette design
+prototype (see `project/Cagette.dc.html` and `chats/chat1.md` for the original design brief).
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Structure
 
-## What you should do — IMPORTANT
+- `server/` — Node.js + Express + PostgreSQL (Prisma) API: inventory, alerts, receipt OCR, promos.
+- `app/` — React Native (Expo) mobile app: Accueil, Stock, Alertes, Promos, and the receipt scan flow.
+- `project/`, `chats/` — original design bundle exported from Claude Design (kept for reference).
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+## Running locally
 
-**Read `project/Cagette.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+1. **Database**: have a Postgres instance available (local install or Docker).
+2. **Server**:
+   ```
+   cd server
+   cp .env.example .env   # set DATABASE_URL
+   npm install
+   npm run prisma:migrate
+   npm run seed
+   npm run dev
+   ```
+3. **App**:
+   ```
+   cd app
+   cp .env.example .env   # set EXPO_PUBLIC_API_URL to the server's address
+   npm install
+   npm start
+   ```
+   Then open in the iOS Simulator, Android emulator, Expo Go, or `npm run web`.
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
-
-## About the design files
-
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
-
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
-
-## Bundle contents
-
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Gestion des courses et stock` project files (HTML prototypes, assets, components)
+See `server/README.md` and `app/README.md` for more detail (including the receipt OCR provider
+setup, which falls back to a fixed demo parse until an API key is configured).

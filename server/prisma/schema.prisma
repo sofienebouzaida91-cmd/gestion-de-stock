@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model InventoryItem {
+  id        String    @id @default(cuid())
+  name      String
+  emoji     String
+  qty       Int
+  unit      String?
+  category  String
+  expiresAt DateTime?
+  lowStock  Boolean   @default(false)
+  addedToList Boolean @default(false)
+  createdAt DateTime  @default(now())
+}
+
+model Promo {
+  id           String  @id @default(cuid())
+  initial      String
+  color        String
+  product      String
+  enseigne     String
+  deal         String
+  off          String
+  matchKeyword String?
+  reason       String?
+  sortOrder    Int     @default(0)
+}
+
+model Receipt {
+  id          String        @id @default(cuid())
+  store       String
+  purchasedAt DateTime      @default(now())
+  total       Float
+  status      String        @default("pending") // pending | confirmed
+  createdAt   DateTime      @default(now())
+  items       ReceiptItem[]
+}
+
+model ReceiptItem {
+  id        String   @id @default(cuid())
+  receiptId String
+  receipt   Receipt  @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+  name      String
+  emoji     String
+  qty       Int
+  unit      String?
+  category  String
+  expiresAt DateTime?
+  included  Boolean  @default(true)
+}
