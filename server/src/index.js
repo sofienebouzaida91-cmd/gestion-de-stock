@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+const { prisma } = require("./lib/prisma");
+const { autoSeedIfEmpty } = require("./lib/autoSeed");
 const inventoryRoutes = require("./routes/inventory");
 const receiptsRoutes = require("./routes/receipts");
 const promosRoutes = require("./routes/promos");
@@ -23,4 +25,8 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Cagette API listening on :${port}`));
+autoSeedIfEmpty(prisma)
+  .catch((e) => console.error("Auto-seed failed:", e))
+  .finally(() => {
+    app.listen(port, () => console.log(`Cagette API listening on :${port}`));
+  });
